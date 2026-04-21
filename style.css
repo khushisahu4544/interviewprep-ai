@@ -32,8 +32,10 @@ h1 {
   font-size: 32px;
   margin-bottom: 10px;
   background: linear-gradient(45deg, #ff7eb3, #ff758c);
+  background-clip: text; /* ADD THIS */
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  color: #ff7eb3; /* fallback */
 }
 
 /* PARAGRAPH */
@@ -53,10 +55,11 @@ button {
   font-size: 16px;
   cursor: pointer;
   transition: 0.3s;
+  margin-top: 10px;
 }
 
 button:hover {
-  transform: scale(1.1);
+  transform: scale(1.08);
   box-shadow: 0 0 15px #ff7eb3;
 }
 
@@ -70,4 +73,44 @@ button:hover {
     opacity: 1;
     transform: translateY(0);
   }
+}
+/*dropdown*/
+select{
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid #ff7eb3;
+    outline: none;
+    width: 100%;
+    margin-top: 10px;
+    font-size: 16px;
+
+/*glass effect*/
+    background: linear-gradient(45deg,#ff7eb3,#ff4e50);
+    color: white;
+    font-weight: bold;
+    
+ /*smooth feel*/
+     transition: 0.3s;
+     cursor: pointer;   
+    box-shadow: 0 0 10px rgba(255,126,179,0.6)
+
+}
+select:hover{
+    transform: scale(1.05);
+    box-shadow: 0 0 20px #ff4e50;
+}
+select:focus{
+    box-shadow: 0 0 10px #ff7eb3;
+}
+/*back button special*/
+button.back{
+    background: #444;
+}
+select option{
+    background: #222;
+    color: white;
+}
+label{
+    font-size: 14px;
+    opacity: 0.6;
 }
