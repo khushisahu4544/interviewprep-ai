@@ -1,6 +1,4 @@
-function start(){
-    alert("Interview Started");
-}
+
 // START BUTTON
 function start() {
   let category = document.getElementById("category").value;
@@ -44,13 +42,16 @@ let hrQuestions = [
   { q: "How do you handle pressure?", a: "" },
   { q: "What are your goals?", a: "" }
 ];
- 
+ //variable
 
 let questions = [];
 let index = 0;
 let score = 0;
+let timeLeft=15;
+let timer;
+let isProcessing=false;
 
-// LOAD QUESTIONS
+// LOAD page
 window.onload = function () {
 
   let category = localStorage.getItem("category");
@@ -60,55 +61,159 @@ window.onload = function () {
   } else {
     questions = hrQuestions;
   }
-
-  if (document.getElementById("question")) {
-    document.getElementById("question").innerText = questions[index].q;
-  }
   //shuffle question 
   questions=questions.sort(()=>0.5- Math.random());
 
-  // RESULT PAGE
+    //load first question
+  if (document.getElementById("question")) {
+    document.getElementById("question").innerText = questions[index].q;
+    startTimer();
+  }
+  
+  // load score on RESULT PAGE
   if (document.getElementById("scoreText")) {
     let finalScore = localStorage.getItem("score");
     document.getElementById("scoreText").innerText = 
       "Your Score: " + finalScore;
   }
+  
+
 };
 
-// NEXT BUTTON
+
+// TIMER FUNCTION
+
+
+function startTimer() {
+    
+  clearInterval(timer);//stop older time
+  timeLeft=15; //fixed time for every question
+  isProcessing=false;
+
+  let timerText = document.getElementById("timer");
+
+  timer = setInterval(() => {
+
+    if (timerText) {
+
+      timerText.innerText = "⏱ Time: " + timeLeft + "s";
+
+    }
+
+    timeLeft--;
+    //when time ends
+
+    if (timeLeft < 0 && !isProcessing) {
+      isProcessing=true;
+      clearInterval(timer);
+
+      showBubble("⏰ Time Up!", "wrong");
+    // auto move to next question
+      setTimeout(() => {
+
+        nextQuestion();
+
+      }, 800);
+
+    }
+
+  }, 1000);
+};
+
+
+// NEXT QUESTION
+
+
+
 function nextQuestion() {
+  clearInterval(timer);
+  let answerBox=document.getElementById("answer");
   let userAnswer = document.getElementById("answer").value.toLowerCase();
-
   let correctAnswer = questions[index].a.toLowerCase();
-  let progress = ((index) / questions.length) * 100;
-document.getElementById("progressBar").style.width = progress + "%";
+  
+  // CHECK ANSWER
 
-  // Simple matching
   if (correctAnswer && userAnswer.includes(correctAnswer)) {
+
     score++;
+
+    showBubble("✅ Correct!", "correct");
+
+  } else {
+
+    showBubble("❌ Wrong!", "wrong");
+
   }
 
   index++;
 
+  // UPDATE PROGRESS BAR
+
+  let progress = (index / questions.length) * 100;
+
+  let bar = document.getElementById("progressBar");
+
+  if (bar) {
+
+    bar.style.width = progress + "%";
+
+  }
+
+  // NEXT OR END
+
   if (index < questions.length) {
+
     document.getElementById("question").innerText = questions[index].q;
-    document.getElementById("answer").value = "";
-  } else {
-    // SAVE SCORE
+
+    answerBox.value='';
+     setTimeout(startTimer,500);
+}
+  else {
+
     localStorage.setItem("score", score);
 
-    // GO TO RESULT PAGE
     window.location.href = "result.html";
+
   }
+
 }
 
-// BACK
+
+
+// BUBBLE FUNCTION
+
+
+
+function showBubble(message, type) {
+
+  let bubble = document.getElementById("bubble");
+
+  if (!bubble) return;
+
+  bubble.innerText = message;
+  bubble.className=type;
+  bubble.style.display='none';
+
+
+  setTimeout(() => {
+
+    bubble.style.display = "none";
+
+  }, 1500);
+
+}
+
+// NAVIGATION
 function goBack() {
+
   window.location.href = "index.html";
+
 }
 
-// RESTART
 function restart() {
+
   localStorage.clear();
+
   window.location.href = "index.html";
+
 }
