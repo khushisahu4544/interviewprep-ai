@@ -1,4 +1,51 @@
+function signup() {
 
+  let user = document.getElementById("username").value.trim();
+
+  let pass = document.getElementById("password").value.trim();
+  if(!user || !pass){
+    document.getElementById("authMsg").innerText="fill all fields";
+    return;
+  }
+
+  localStorage.setItem("user", user);
+
+  localStorage.setItem("pass", pass);
+  localStorage.setItem("isLoggedIn","true");//auto login
+
+  
+    window.location.href="index.html"
+  }
+
+
+function login() {
+
+  let user = document.getElementById("username").value.trim();
+
+  let pass = document.getElementById("password").value.trim();
+
+  let savedUser = localStorage.getItem("user");
+
+  let savedPass = localStorage.getItem("pass");
+
+  if (user === savedUser && pass === savedPass) {
+
+    localStorage.setItem("isLoggedIn", "true");
+      window.location.href = "index.html";
+  }else{
+    
+
+    document.getElementById("authMsg").innerText = "Invalid credentials";
+
+  }
+
+}
+
+function logout() {
+
+  localStorage.removeItem("isLoggedIn");
+  window.location.href="auth.html"
+}
 // START BUTTON
 function start() {
   let category = document.getElementById("category").value;
@@ -12,6 +59,7 @@ function start() {
 
 // BACK BUTTON
 function goBack() {
+    clearInterval(timer);
   window.location.href = "index.html";
 }
 // JAVASCRIPT QUESTIONS
@@ -76,6 +124,21 @@ window.onload = function () {
     document.getElementById("scoreText").innerText = 
       "Your Score: " + finalScore;
   }
+  if (document.getElementById("feedback")) {
+
+  let finalScore = localStorage.getItem("score");
+  let feedbackText = "";
+
+  if (finalScore >= 8) {
+    feedbackText = " Excellent you're interview ready";
+  } else if (finalScore >= 5) {
+    feedbackText = "Good but practice more";
+  } else {
+    feedbackText = " Keep practicing";
+  }
+
+  document.getElementById("feedback").innerText = feedbackText;
+}
   
 
 };
@@ -191,13 +254,13 @@ function showBubble(message, type) {
   if (!bubble) return;
 
   bubble.innerText = message;
-  bubble.className=type;
-  bubble.style.display='none';
+  bubble.className="bubble show"+ type;
+  
 
 
   setTimeout(() => {
 
-    bubble.style.display = "none";
+    bubble.classList.remove("show");
 
   }, 1500);
 
@@ -205,7 +268,7 @@ function showBubble(message, type) {
 
 // NAVIGATION
 function goBack() {
-
+   clearInterval(timer);
   window.location.href = "index.html";
 
 }
@@ -214,6 +277,6 @@ function restart() {
 
   localStorage.clear();
 
-  window.location.href = "index.html";
+  window.location.href = "auth.html";
 
 }

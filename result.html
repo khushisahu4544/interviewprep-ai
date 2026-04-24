@@ -6,13 +6,20 @@
 </head>
 
 <body>
-
+<script>
+            if(localStorage.getItem("isLoggedIn")!=="true"){
+                window.location.href="auth.html"
+            }
+        </script>
 <div class="container">
   <h1>Your Result</h1>
 
   <p id="scoreText"></p>
-
+  <p id="feedback"></p>
   <button onclick="restart()">Restart</button>
+  
+  <button onclick="logout()">Logout</button>
+
 </div>
 
 <script src="script.js"></script>
